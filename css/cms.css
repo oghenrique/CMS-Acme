@@ -1,0 +1,30 @@
+html body{
+    background-color: #171717;
+}
+
+header{
+    width: 100vw;
+    display: grid;
+    place-items: center;
+}
+
+main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+footer{
+    width: 100vw;
+    display: grid;
+    place-items: center;
+}
+
+button{
+    border-radius: 32px !important;
+}
+
+table{
+
+    width: 90vw !important;
+}
