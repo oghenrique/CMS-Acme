@@ -1,4 +1,4 @@
-<h1 align="center">  CMS | ACME Filmes </h1>
+<h1 align="center">  🎬 CMS | ACME Filmes 🎬 </h1>
 
 <br>
 
