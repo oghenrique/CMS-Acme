@@ -15,7 +15,7 @@ async function preencherTabela() {
         tr.appendChild(idTd)
 
         const nomeTd = document.createElement('td')
-        nomeTd.textContent = filme.nome
+        nomeTd.textContent = filme.titulo
         tr.appendChild(nomeTd)
 
         const editarTd = document.createElement('td')
@@ -43,7 +43,7 @@ function abrirModalEdicao(filme) {
     const modalEdicao = new bootstrap.Modal(document.getElementById('modalEdicaoFilme'))
     
     document.getElementById('filmeId').value = filme.id
-    document.getElementById('tituloEditar').value = filme.nome
+    document.getElementById('tituloEditar').value = filme.titulo
     document.getElementById('sinopseEditar').value = filme.sinopse
     document.getElementById('data_lancamentoEditar').value = formatarData(filme.data_lancamento)
     document.getElementById('duracaoEditar').value = formatarTempo(filme.duracao)

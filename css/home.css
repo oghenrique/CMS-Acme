@@ -1,0 +1,28 @@
+html body{
+    background-color: #171717;
+}
+
+header{
+    width: 100vw;
+    display: grid;
+    place-items: center;
+}
+
+main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+}
+
+button {
+    width: 40vh;
+    height: 20vh;
+}
+
+.container{
+    background-color: aqua;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
