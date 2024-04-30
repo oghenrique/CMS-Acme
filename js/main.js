@@ -1,4 +1,5 @@
 import { getFilmes, postFilme, deleteFilme, putFilme } from './filmes.js'
+import { getClassificacoes } from './classificacoes.js'
 import { formatarData, formatarTempo } from './tratamento.js'
 
 
@@ -100,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Função para salvar um novo filme
 async function salvarNovoFilme() {
-    console.log('Função salvarNovoFilme() chamada.')
     // Coletar os dados do formulário
     const form = document.getElementById('formNovoFilme')
     const formData = new FormData(form)
@@ -109,8 +109,17 @@ async function salvarNovoFilme() {
         novoFilme[key] = value
     })
 
-    console.log('Novo filme:', novoFilme)
-
+    // Preencher o campo de seleção de classificação com as opções da API
+    const classificacoes = await getClassificacoes()
+    console.log(classificacoes)
+    const selectClassificacao = document.getElementById('classificacao')
+    selectClassificacao.innerHTML = ''
+    classificacoes.forEach(classificacao => {
+        const option = document.createElement('option')
+        option.value = classificacao.id
+        option.textContent = classificacao.nome
+        selectClassificacao.appendChild(option)
+    })
 
     // Formatar a data e o tempo antes de enviar para a API
     novoFilme['data_lancamento'] = formatarData(novoFilme['data_lancamento'])
@@ -125,7 +134,6 @@ async function salvarNovoFilme() {
         console.error('Erro ao salvar o filme')
     }
 }
-
 // Função para excluir um filme
 async function excluirFilme(id) {
     const modalConfirmacao = new bootstrap.Modal(document.getElementById('modalConfirmacaoExclusao'))
