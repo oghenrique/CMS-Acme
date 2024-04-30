@@ -21,8 +21,9 @@ button {
 }
 
 .container{
-    background-color: aqua;
-    display: flex;
+    gap: 24px;
+    grid-template-columns: repeat(3, 1fr);
+    display: grid;
     align-items: center;
     justify-content: center;
 }

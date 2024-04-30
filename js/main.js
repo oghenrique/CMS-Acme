@@ -138,7 +138,6 @@ async function excluirFilme(id) {
         const sucesso = await deleteFilme(id)
         if (sucesso) {
             console.log('Filme excluído com sucesso!')
-            // Atualiza a tabela após a exclusão
             location.reload()
         } else {
             console.error('Erro ao excluir o filme')
