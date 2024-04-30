@@ -41,8 +41,8 @@
                     <div class="modal-body">
                         <form id="formNovoGenero">
                             <div class="mb-3">
-                                <label for="titulo" class="form-label">Nome do gênero</label>
-                                <input type="text" class="form-control" id="titulo" name="nome" placeholder="Nome do gênero">
+                                <label for="nome" class="form-label">Nome do gênero</label>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do gênero">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -63,10 +63,14 @@
             </div>
             <div class="modal-body">
                 <form id="formEditarGenero">
-                    <input type="hidden" id="GeneroId" name="id">
+                    <input type="hidden" id="generoId" name="id">
                     <div class="mb-3">
-                        <label for="titulo" class="form-label">Nome do gênero</label>
-                        <input type="text" class="form-control" id="tituloEditar" name="nome" placeholder="Nome do gêner">
+                        <label for="nome" class="form-label">Nome do gênero</label>
+                        <input type="text" class="form-control" id="nomeEditar" name="nome" placeholder="Nome do gênero">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="submit" id="btnAtualizar" class="btn btn-primary" style="background-color: #F30000; border: none;">Atualizar</button>
                     </div>
                 </form>
             </div>

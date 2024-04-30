@@ -2,53 +2,41 @@ import { getGeneros, postGenero, deleteGenero, putGenero } from './generos.js'
 
 // Função para preencher a tabela com os generos
 async function preencherTabela() {
-    try {
-        const generos = await getGeneros();
-        console.log('Generos obtidos:', generos); // Log para verificar os dados obtidos
+    const generos = await getGeneros()
+    console.log(generos)
+    const generosBody = document.getElementById('generosBody')
 
-        const generosBody = document.getElementById('generosBody');
-        if (!generosBody) {
-            console.error('Elemento com ID generosBody não encontrado.');
-            return;
-        }
+    generos.forEach(genero => {
+        const tr = document.createElement('tr')
 
-        generos.forEach(genero => {
-            console.log('Preenchendo genero:', genero); // Log para verificar cada genero
+        const idTd = document.createElement('td')
+        idTd.textContent = genero.id
+        tr.appendChild(idTd)
 
-            const tr = document.createElement('tr');
+        const nomeTd = document.createElement('td')
+        nomeTd.textContent = genero.nome
+        tr.appendChild(nomeTd)
 
-            const idTd = document.createElement('td');
-            idTd.textContent = genero.id;
-            tr.appendChild(idTd);
+        const editarTd = document.createElement('td')
+        const editarIcon = document.createElement('i')
+        editarIcon.classList.add('fa-solid', 'fa-pen-to-square')
+        editarIcon.style.cursor = 'pointer'
+        editarIcon.addEventListener('click', () => abrirModalEdicao(genero)) 
+        editarTd.appendChild(editarIcon)
+        tr.appendChild(editarTd)
 
-            const nomeTd = document.createElement('td');
-            nomeTd.textContent = genero.nome;
-            tr.appendChild(nomeTd);
+        const excluirTd = document.createElement('td')
+        const excluirIcon = document.createElement('i')
+        excluirIcon.classList.add('fa-solid', 'fa-trash-can')
+        excluirIcon.style.cursor = 'pointer'
+        excluirIcon.addEventListener('click', () => excluirGenero(genero.id))
+        excluirTd.appendChild(excluirIcon)
+        tr.appendChild(excluirTd)
 
-            const editarTd = document.createElement('td');
-            const editarIcon = document.createElement('i');
-            editarIcon.classList.add('fa-solid', 'fa-pen-to-square');
-            editarIcon.style.cursor = 'pointer';
-            editarIcon.addEventListener('click', () => abrirModalEdicao(genero));
-            editarTd.appendChild(editarIcon);
-            tr.appendChild(editarTd);
-
-            const excluirTd = document.createElement('td');
-            const excluirIcon = document.createElement('i');
-            excluirIcon.classList.add('fa-solid', 'fa-trash-can');
-            excluirIcon.style.cursor = 'pointer';
-            excluirIcon.addEventListener('click', () => excluirGenero(genero.id));
-            excluirTd.appendChild(excluirIcon);
-            tr.appendChild(excluirTd);
-
-            generosBody.appendChild(tr);
-        });
-    } catch (error) {
-        console.error('Erro ao preencher a tabela com os generos:', error); // Log para capturar erros
-    }
+        generosBody.appendChild(tr)
+    })
 }
 
-// Função para abrir o modal de edição com os detalhes do genero preenchidos
 function abrirModalEdicao(genero) {
     const modalEdicao = new bootstrap.Modal(document.getElementById('modalEdicaoGenero'))
     
@@ -75,7 +63,7 @@ async function atualizarGenero(event) {
     if (sucesso) {
         console.log('genero atualizado com sucesso!')
         // Fecha o modal de edição após a atualização
-        const modalEdicao = bootstrap.Modal.getInstance(document.getElementById('modalEdicaogenero'))
+        const modalEdicao = bootstrap.Modal.getInstance(document.getElementById('modalEdicaoGenero'))
         modalEdicao.hide()
         // Atualiza a tabela após a atualização
         location.reload()
@@ -105,9 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Função para salvar um novo genero
 async function salvarNovoGenero() {
-    console.log('Função salvarNovogenero() chamada.')
+    console.log('Função salvarNovoGenero() chamada.')
     // Coletar os dados do formulário
-    const form = document.getElementById('formNovogenero')
+    const form = document.getElementById('formNovoGenero')
     const formData = new FormData(form)
     const novoGenero = {}
     formData.forEach((value, key) => {
