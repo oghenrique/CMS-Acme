@@ -23,7 +23,7 @@ async function preencherTabela() {
         const editarIcon = document.createElement('i')
         editarIcon.classList.add('fa-solid', 'fa-pen-to-square')
         editarIcon.style.cursor = 'pointer'
-        editarIcon.addEventListener('click', () => abrirModalEdicao(filme)) 
+        editarIcon.addEventListener('click', () => abrirModalEdicao(filme))
         editarTd.appendChild(editarIcon)
         tr.appendChild(editarTd)
 
@@ -40,9 +40,10 @@ async function preencherTabela() {
 }
 
 // Função para abrir o modal de edição com os detalhes do filme preenchidos
-function abrirModalEdicao(filme) {
+async function abrirModalEdicao(filme) {
+    console.log("Filme:", filme)
     const modalEdicao = new bootstrap.Modal(document.getElementById('modalEdicaoFilme'))
-    
+
     document.getElementById('filmeId').value = filme.id
     document.getElementById('tituloEditar').value = filme.titulo
     document.getElementById('sinopseEditar').value = filme.sinopse
@@ -50,9 +51,34 @@ function abrirModalEdicao(filme) {
     document.getElementById('duracaoEditar').value = formatarTempo(filme.duracao)
     document.getElementById('foto_capaEditar').value = filme.foto_capa
     document.getElementById('valor_unitarioEditar').value = filme.valor_unitario
-    
+
+    // Preencher as opções de classificação antes de abrir o modal
+    await preencherOpcoesClassificacaoEditar(filme)
+
+    // Verificar se a classificação do filme está sendo acessada corretamente
+    console.log("ID da classificação selecionada:", filme.id_classificacao)
+
+    // Exibir a classificação do filme selecionada
+    const idClassificacaoSelecionada = filme.id_classificacao // Supondo que a classificação seja a primeira da lista
+    console.log("ID da classificação selecionada:", idClassificacaoSelecionada)
+    document.getElementById('classificacaoEditar').value = idClassificacaoSelecionada
+
     modalEdicao.show()
 }
+
+async function preencherOpcoesClassificacaoEditar() {
+    const classificacoes = await getClassificacoes()
+    const selectClassificacao = document.getElementById('classificacaoEditar')
+    selectClassificacao.innerHTML = '' // Limpa quaisquer opções anteriores
+
+    classificacoes.forEach(classificacao => {
+        const option = document.createElement('option')
+        option.value = classificacao.id
+        option.textContent = classificacao.nome
+        selectClassificacao.appendChild(option)
+    })
+}
+
 
 // Função para atualizar um filme
 async function atualizarFilme(event) {
@@ -65,6 +91,9 @@ async function atualizarFilme(event) {
     formData.forEach((value, key) => {
         filmeAtualizado[key] = value
     })
+
+    // Verificar os dados do filme atualizado
+    console.log('Dados do filme atualizado:', filmeAtualizado)
 
     // Envia os dados para a API
     const sucesso = await putFilme(filmeAtualizado)
@@ -80,7 +109,8 @@ async function atualizarFilme(event) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+
+document.addEventListener('DOMContentLoaded', async () => {
     preencherTabela()
 
     const btnSalvar = document.getElementById('btnSalvar')
@@ -96,10 +126,25 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('Elemento com ID formEditarFilme não encontrado.')
     }
+
+    // Preencher as opções de classificação quando o documento for carregado
+    await preencherOpcoesClassificacao()
 })
 
 
-// Função para salvar um novo filme
+async function preencherOpcoesClassificacao() {
+    const classificacoes = await getClassificacoes()
+    const selectClassificacao = document.getElementById('classificacao')
+    selectClassificacao.innerHTML = '' // Limpa quaisquer opções anteriores
+    classificacoes.forEach(classificacao => {
+        const option = document.createElement('option')
+        option.value = classificacao.id
+        option.textContent = classificacao.nome
+        selectClassificacao.appendChild(option)
+    })
+}
+
+
 async function salvarNovoFilme() {
     // Coletar os dados do formulário
     const form = document.getElementById('formNovoFilme')
@@ -109,21 +154,14 @@ async function salvarNovoFilme() {
         novoFilme[key] = value
     })
 
-    // Preencher o campo de seleção de classificação com as opções da API
-    const classificacoes = await getClassificacoes()
-    console.log(classificacoes)
-    const selectClassificacao = document.getElementById('classificacao')
-    selectClassificacao.innerHTML = ''
-    classificacoes.forEach(classificacao => {
-        const option = document.createElement('option')
-        option.value = classificacao.id
-        option.textContent = classificacao.nome
-        selectClassificacao.appendChild(option)
-    })
-
     // Formatar a data e o tempo antes de enviar para a API
     novoFilme['data_lancamento'] = formatarData(novoFilme['data_lancamento'])
     novoFilme['duracao'] = formatarTempo(novoFilme['duracao'])
+
+    // Obter o ID da classificação selecionada
+    const idClassificacaoSelecionada = formData.get('id_classificacao')
+    novoFilme['id_classificacao'] = idClassificacaoSelecionada
+
 
     // Enviar os dados para a API
     const sucesso = await postFilme(novoFilme)
@@ -134,6 +172,7 @@ async function salvarNovoFilme() {
         console.error('Erro ao salvar o filme')
     }
 }
+
 // Função para excluir um filme
 async function excluirFilme(id) {
     const modalConfirmacao = new bootstrap.Modal(document.getElementById('modalConfirmacaoExclusao'))
